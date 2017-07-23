@@ -1,0 +1,88 @@
+### Centos_7安装第三方YUM源(EPEL、RPMForge和RPMFusion) ###
+#
+#1、安装yum-priorities插件
+
+[root@localhost ~]# yum install -y yum-priorities
+
+yum-priorities插件的作用主要是设置调用源时的优先级的，一般将官方的优先级设置为最高，在每个库最后加上priority=[]字段来设置每个镜像的优先级，1为最高，99为最低。
+
+#2、CentOS默认源设置（一般设置CentOS-Base，设置为优先级最高1）
+
+[root@localhost ~]# vi /etc/yum.repos.d/CentOS-Base.repo
+
+[base]、[updates]、[extras]
+最后加上priority=1
+
+[centosplus]、[contrib]
+最后加上priority=2
+
+#3、安装epel
+
+32位：rpm -ivh http://mirrors.ustc.edu.cn/fedora/epel/6/i386/epel-release-6-8.noarch.rpm
+
+64位：rpm -ivh http://mirrors.ustc.edu.cn/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
+
+[root@localhost ~]# rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+
+[root@localhost ~]# vi /etc/yum.repos.d/epel.repo
+
+[epel]
+后面加上priority=11
+
+#4、安装rpmforge
+
+打开http://download.csdn.net/detail/mimi00x/8081263
+
+cd rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm所在路径
+
+[root@localhost Downloads]# rpm -ivh rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm
+
+[root@localhost ~]# vi /etc/yum.repos.d/rpmforge.repo
+
+[rpmforge]
+后面加上priority=12
+
+#5、安装rpmfusion
+
+32位：rpm -ivh http://download1.rpmfusion.org/free/el/updates/6/i386/rpmfusion-free-release-6-1.noarch.rpm
+
+64位：rpm -ivh http://download1.rpmfusion.org/free/el/updates/6/x86_64/rpmfusion-free-release-6-1.noarch.rpm
+
+[root@localhost ~]# vi /etc/yum.repos.d/rpmfusion-free-updates.repo
+
+[rpmfusion-free-updates]
+后面加上priority=13
+
+[root@localhost ~]# vi /etc/yum.repos.d/rpmfusion-free-updates-testing.repo
+
+[rpmfusion-free-updates-testing]
+后面加上priority=13
+
+#6、安装remi
+
+rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+
+[root@localhost ~]# vi remi.repo
+
+[remi]
+后面加上priority=14
+
+#7、加载所有YUM源
+
+[root@localhost ~]# yum clean all
+
+[root@localhost ~]# yum check-update
+
+[root@localhost ~]# yum repolist  #列出所有第三方YUM源的软件包
+#
+###
+
+### Others ###
+#
+yum install yum-axelget
+
+yum-axelget是EPEL提供的一个yum插件。使用该插件后用yum安装软件时可以并行下载，大大提高了软件的下载速度，减少了下载的等待时间:
+
+[root@localhost opt]#  yum install fuse-ntfs-3g
+#
+###
